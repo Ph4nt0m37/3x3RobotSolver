@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static\css\main.css">
+    <title>Phantom's Rubik's Cube Solver</title>
+</head>
+<body>
+    <h2 class="center-text">{{scramble}}</h2>
+    <div class="line"></div>
+    <div id="time">
+        <span class = "timer" id="min">
+            0:</span>
+        <span class = "timer" id="sec">
+            00.</span>
+        <span class = "timer" id="count">
+            00</span>
+        <div class="vl"></div>
+        <span class = "rtimer" id="rcount">
+            00</span>
+        <span class = "rtimer" id="rsec">
+            00.</span>
+        <span class = "rtimer" id="rmin">
+            0:</span>
+        <span hidden class = "rtimer" id = "rwait">
+            Solving...
+        </span>
+    </div>
+    <script>
+        let minute = 0;
+        let seconds = 0;
+        let count = 0;
+
+        let rminute = 0;
+        let rseconds = 0;
+        let rcount = 0;
+
+        let timeout;
+
+        let timing = false;
+        let rtiming = false;
+
+        document.body.onkeyup = function(e) {
+            if (e.key == " " ||
+                e.code == "Space" ||      
+                e.keyCode == 32      
+            ) {
+                document.getElementById("sec").className = "timer";
+                document.getElementById("min").className = "timer";
+                document.getElementById("count").className = "timer";
+                document.getElementById("rsec").className = "rtimer";
+                document.getElementById("rmin").className = "rtimer";
+                document.getElementById("rcount").className = "rtimer";
+                document.getElementById("rsec").style.display = "block";
+                document.getElementById("rmin").style.display = "block";
+                document.getElementById("rcount").style.display = "block";
+                document.getElementById("rwait").style.display = "none";
+                if (count > 0 || seconds > 0 || minute > 0) {
+                    clearTimeout(timeout)
+                    count = 0;
+                    seconds = 0;
+                    minute = 0;
+                }else {
+                    timing = true;
+                    rtiming = true;
+                    timer();
+                }
+            }else{
+                if (count > 0 || seconds > 0 || minute > 0) {
+                    clearTimeout(timeout)
+                    count = 0;
+                    seconds = 0;
+                    minute = 0;
+                    document.getElementById("sec").className = "timer";
+                    document.getElementById("min").className = "timer";
+                    document.getElementById("count").className = "timer";
+                    document.getElementById("rsec").className = "rtimer";
+                    document.getElementById("rmin").className = "rtimer";
+                    document.getElementById("rcount").className = "rtimer";
+                    document.getElementById("rsec").style.display = "block";
+                    document.getElementById("rmin").style.display = "block";
+                    document.getElementById("rcount").style.display = "block";
+                    document.getElementById("rwait").style.display = "none";
+                }
+            }
+        }
+
+        document.onkeydown=function(e){
+            if (e.key == " " ||
+                e.code == "Space" ||      
+                e.keyCode == 32      
+            ) {
+                document.getElementById("sec").className = "timergreen";
+                document.getElementById("min").className = "timergreen";
+                document.getElementById("count").className = "timergreen";
+                document.getElementById("rsec").className = "rtimergreen";
+                document.getElementById("rmin").className = "rtimergreen";
+                document.getElementById("rcount").className = "rtimergreen";
+            }
+        }
+
+        function timer() {
+            document.getElementById("rsec").style.display = "none";
+            document.getElementById("rmin").style.display = "none";
+            document.getElementById("rcount").style.display = "none";
+            document.getElementById("rwait").style.display = "block";
+            if (timing) {
+                count++;
+                if (count == 100) {
+                    seconds++;
+                    count = 0;
+                }
+                if (seconds == 60) {
+                    minute++;
+                    seconds = 0;
+                }
+                
+                let countString = count.toString();
+                let secondString = seconds.toString();
+                if (count < 10) {
+                    countString = "0" + countString;
+                }
+                if (seconds < 10 && minute > 0) {
+                    secondString = "0" + secondString;
+                    document.getElementById('sec').innerHTML = secondString+".";
+                }else{
+                    document.getElementById('sec').innerHTML = seconds.toString()+".";
+                }
+                if (minute > 0) {
+                    document.getElementById('min').innerHTML = minute.toString()+":";
+                }else{
+                    document.getElementById('min').innerHTML = "";
+                }
+                document.getElementById('count').innerHTML = countString;
+            }
+            if (rtiming) {
+                rcount++;
+                if (rcount == 100) {
+                    rseconds++;
+                    rcount = 0;
+                }
+                if (rseconds == 60) {
+                    rminute++;
+                    rseconds = 0;
+                }
+                
+                let rcountString = rcount.toString();
+                let rsecondString = rseconds.toString();
+                if (rcount < 10) {
+                    rcountString = "0" + rcountString;
+                }
+                if (rseconds < 10 && rminute > 0) {
+                    rsecondString = "0" + rsecondString;
+                    document.getElementById('rsec').innerHTML = rsecondString+".";
+                }else{
+                    document.getElementById('rsec').innerHTML = rseconds.toString()+".";
+                }
+                if (rminute > 0) {
+                    document.getElementById('rmin').innerHTML = rminute.toString()+":";
+                }else{
+                    document.getElementById('rmin').innerHTML = "";
+                }
+                document.getElementById('rcount').innerHTML = rcountString;
+            }
+            timeout = setTimeout(timer,10);
+        }
+    </script>
+    <div class="line"></div>
+</body>
+</html>
